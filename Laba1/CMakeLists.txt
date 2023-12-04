@@ -26,3 +26,4 @@ add_executable(main_test
     "main.cc")
 target_link_libraries(main_test gtest gtest_main polynomial)
 target_include_directories(main_test PRIVATE "${CMAKE_SOURCE_DIR}")
+

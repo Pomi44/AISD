@@ -3,18 +3,18 @@
 #include <cmath>
 #include <random>
 
-template<typename T>
+template <typename T>
 class Polynomial {
 private:
     T* coefficients;
     int degree;
-    static constexpr double epsilon = 1e-10; // “очность сравнени€ вещественных чисел
+    static constexpr double epsilon = 1e-10;
 
 public:
     Polynomial(int degree) : degree(degree) {
-        coefficients = new T[degree + 1];
+        coefficients = new T[degree + 1]();
         for (int i = 0; i <= degree; ++i) {
-            coefficients[i] = T();
+            coefficients[i] = T(1);
         }
     }
 
@@ -39,13 +39,8 @@ public:
     void set(int power, T value) {
         if (power >= 0) {
             if (power > degree) {
-                T* newCoefficients = new T[power + 1];
-                for (int i = 0; i <= degree; ++i) {
-                    newCoefficients[i] = coefficients[i];
-                }
-                for (int i = degree + 1; i <= power; ++i) {
-                    newCoefficients[i] = T();
-                }
+                T* newCoefficients = new T[power + 1]();
+                std::copy(coefficients, coefficients + degree + 1, newCoefficients);
                 delete[] coefficients;
                 coefficients = newCoefficients;
                 degree = power;
@@ -83,6 +78,16 @@ public:
         return result;
     }
 
+    int get_degree() const {
+        return degree;
+    }
+
+    T* get_coefficients() const {
+        T* coefficients_copy = new T[degree + 1];
+        std::copy(coefficients, coefficients + degree + 1, coefficients_copy);
+        return coefficients_copy;
+    }
+
     T evaluate(T x) const {
         T result = T();
         T powerX = 1;
@@ -98,22 +103,15 @@ public:
             --degree;
         }
         T* newCoefficients = new T[degree + 1];
-        for (int i = 0; i <= degree; ++i) {
-            newCoefficients[i] = coefficients[i];
-        }
+        std::copy(coefficients, coefficients + degree + 1, newCoefficients);
         delete[] coefficients;
         coefficients = newCoefficients;
     }
 
     void expand(int newDegree) {
         if (newDegree > degree) {
-            T* newCoefficients = new T[newDegree + 1];
-            for (int i = 0; i <= degree; ++i) {
-                newCoefficients[i] = coefficients[i];
-            }
-            for (int i = degree + 1; i <= newDegree; ++i) {
-                newCoefficients[i] = T();
-            }
+            T* newCoefficients = new T[newDegree + 1]();
+            std::copy(coefficients, coefficients + degree + 1, newCoefficients);
             delete[] coefficients;
             coefficients = newCoefficients;
             degree = newDegree;
@@ -158,3 +156,15 @@ public:
         std::cout << std::endl;
     }
 };
+
+template <typename T>
+Polynomial<T> integratePolynomial(const Polynomial<T>& poly) {
+    int degree = poly.get_degree() + 1;
+    Polynomial<T> integral(degree);
+
+    for (int i = degree - 1; i >= 0; --i) {
+        integral.set(i + 1, poly[i] / static_cast<T>(i + 1));
+    }
+
+    return integral;
+}
