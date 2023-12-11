@@ -13,7 +13,7 @@ struct Node {
 
     Node() : data(), next(nullptr), prev(nullptr) {}
 
-    Node(const T& value) : data(value), next(nullptr), prev(nullptr) {}
+    explicit Node(const T& value) : data(value), next(nullptr), prev(nullptr) {}
 };
 
 template <typename T>
@@ -29,18 +29,18 @@ public:
     LinkedList(const LinkedList& other) : _head(nullptr), _tail(nullptr), _size(0) {
         Node<T>* current = other._head;
         while (current != nullptr) {
-            push_tail(current->data);
+            pushTail(current->data);
             current = current->next;
         }
     }
 
-    LinkedList(size_t count, const T& value) : _head(nullptr), _tail(nullptr), _size(0) {
+    explicit LinkedList(size_t count, const T& value) : _head(nullptr), _tail(nullptr), _size(0) {
         std::random_device rd;
         std::mt19937 gen(rd());
         std::uniform_int_distribution<> dis(1, 100);
 
         for (size_t i = 0; i < count; ++i) {
-            push_tail(static_cast<T>(dis(gen)));
+            pushTail(static_cast<T>(dis(gen)));
         }
     }
 
@@ -53,14 +53,14 @@ public:
             clear();
             Node<T>* current = other._head;
             while (current != nullptr) {
-                push_tail(current->data);
+                pushTail(current->data);
                 current = current->next;
             }
         }
         return *this;
     }
 
-    void push_tail(const T& value) {
+    void pushTail(const T& value) {
         Node<T>* newNode = new Node<T>(value);
         if (_head == nullptr) {
             _head = newNode;
@@ -77,7 +77,7 @@ public:
         ++_size;
     }
 
-    void push_head(const T& value) {
+    void pushHead(const T& value) {
         Node<T>* newNode = new Node<T>(value);
         if (_head == nullptr) {
             _head = newNode;
@@ -94,7 +94,7 @@ public:
         ++_size;
     }
 
-    void pop_head() {
+    void popHead() {
         if (_head == nullptr) {
             throw std::out_of_range("List is empty");
         }
@@ -110,7 +110,7 @@ public:
                 _head->prev = nullptr;
             }
             else {
-                _tail = nullptr; // Устанавливаем хвост в nullptr, если удаляем последний элемент
+                _tail = nullptr;
             }
             delete temp;
         }
@@ -118,7 +118,7 @@ public:
     }
 
 
-    void pop_tail() {
+    void popTail() {
         if (_tail == nullptr) {
             throw std::out_of_range("List is empty");
         }
@@ -162,25 +162,25 @@ public:
         return _size;
     }
 
-    Node<T>* get_head() const {
+    Node<T>* getHead() const {
         return _head;
     }
 
-    Node<T>* get_tail() const {
+    Node<T>* getTail() const {
         return _tail;
     }
 
-    void set_head(Node<T>* newHead) {
+    void setHead(Node<T>* newHead) {
         _head = newHead;
     }
 
-    void set_tail(Node<T>* newTail) {
+    void setTail(Node<T>* newTail) {
         _tail = newTail;
     }
 
     void clear() {
         while (_head != nullptr) {
-            pop_head();
+            popHead();
         }
     }
 
@@ -215,10 +215,10 @@ public:
             return;
         }
         if (ptr == _head) {
-            pop_head();
+            popHead();
         }
         else if (ptr == _tail) {
-            pop_tail();
+            popTail();
         }
         else {
             ptr->prev->next = ptr->next;
@@ -228,7 +228,7 @@ public:
         }
     }
 
-    void delete_node(const T& value) {
+    void deleteNode(const T& value) {
         Node<T>* foundNode = find(value);
 
         while (foundNode != nullptr) {
@@ -237,33 +237,27 @@ public:
         }
     }
 };
+
 template <typename T>
 void reverseLinkedList(LinkedList<T>& list) {
-    if (list.getSize() == 0 || list.get_head() == list.get_tail()) {
-        // Если список пуст или содержит только один элемент, нет необходимости инвертировать
+    if (list.getSize() == 0 || list.getHead() == list.getTail()) {
         return;
     }
 
-    Node<T>* currentNode = list.get_head();
+    Node<T>* currentNode = list.getHead();
     Node<T>* tempNode = nullptr;
 
-    // Меняем местами указатели prev и next узлов для инвертирования списка
     while (currentNode != nullptr) {
         tempNode = currentNode->prev;
         currentNode->prev = currentNode->next;
         currentNode->next = tempNode;
-        currentNode = currentNode->prev; // Переходим к следующему узлу
+        currentNode = currentNode->prev;
     }
 
-    // Обновляем указатели на голову и хвост списка
     if (tempNode != nullptr) {
-        list.set_head(tempNode->prev); // Новая голова
-        list.set_tail(tempNode); // Новый хвост
+        list.setHead(tempNode->prev);
+        list.setTail(tempNode);
     }
-
-    // Также можно добавить логику обновления указателя prev для головы и next для хвоста,
-    // чтобы они указывали на nullptr, если требуется.
 }
-
 
 #endif // LINKEDLIST_H
