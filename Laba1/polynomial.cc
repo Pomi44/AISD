@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <cmath>
 #include <random>
+#include <complex>
 
 template <typename T>
 class Polynomial {
@@ -133,6 +134,24 @@ public:
     bool operator!=(const Polynomial<T>& other) const {
         return !(*this == other);
     }
+
+    bool operator==(const Polynomial<std::complex<T>>& other) const {
+        if (degree != other.degree) {
+            return false;
+        }
+        for (int i = 0; i <= degree; ++i) {
+            if (std::abs(std::real(coefficients[i]) - std::real(other.coefficients[i])) > epsilon ||
+                std::abs(std::imag(coefficients[i]) - std::imag(other.coefficients[i])) > epsilon) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    bool operator!=(const Polynomial<std::complex<T>>& other) const {
+        return !(*this == other);
+    }
+
 
     void print() const {
         bool firstTerm = true;
