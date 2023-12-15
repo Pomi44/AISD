@@ -35,3 +35,42 @@ stats bubbleSort(std::vector<int>& arr) {
 
     return st;
 }
+
+
+stats shakerSort(std::vector<int>& arr) {
+    stats st;
+    int n = arr.size();
+    bool swapped = true;
+    int start = 0;
+    int end = n - 1;
+
+    while (swapped) {
+        swapped = false;
+
+        for (int i = start; i < end; ++i) {
+            ++st.comparison_count;
+            if (arr[i] > arr[i + 1]) {
+                swap(arr[i], arr[i + 1], st);
+                swapped = true;
+            }
+        }
+
+        if (!swapped) 
+            break;
+
+        swapped = false;
+        --end;
+
+        for (int i = end - 1; i >= start; --i) {
+            ++st.comparison_count;
+            if (arr[i] > arr[i + 1]) {
+                swap(arr[i], arr[i + 1], st);
+                swapped = true;
+            }
+        }
+
+        ++start;
+    }
+
+    return st;
+}
