@@ -33,11 +33,26 @@ int main() {
     const int numArrays = 100;
     const int seed = 42;
 
-    std::vector<size_t> sizes = { 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 25000, 50000, 100000 };
+    std::vector<int> sizes = { 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 25000, 50000, 100000 };
 
- 
+    for (int size : sizes) {
+        stats totalStats; 
 
+        for (int i = 0; i < numArrays; ++i) {
+            std::vector<int> randomArray = generateRandomArray(size, seed + i);
+            stats randomStats = naturalTwoWayMergeSort(randomArray);
+            totalStats.comparison_count += randomStats.comparison_count;
+            totalStats.copy_count += randomStats.copy_count;
+        }
 
+        totalStats.comparison_count /= numArrays;
+        totalStats.copy_count /= numArrays;
+
+        std::cout << "Random Array Size: " << size << std::endl;
+        std::cout << "Average Comparison Count: " << totalStats.comparison_count << std::endl;
+        std::cout << "Average Copy Count: " << totalStats.copy_count << std::endl;
+        std::cout << "------------------------" << std::endl;
+    }
     
     for (int size : sizes) {
         std::vector<int> sortedArray = generateSortedArray(size);
