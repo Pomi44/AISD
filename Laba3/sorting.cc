@@ -70,6 +70,9 @@ stats shakerSort(std::vector<int>& arr) {
             }
         }
 
+        if (!swapped)
+            break;
+
         ++start;
     }
 

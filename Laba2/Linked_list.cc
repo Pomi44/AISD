@@ -21,7 +21,7 @@ class LinkedList {
 private:
     Node<T>* _head;
     Node<T>* _tail;
-    size_t _size;
+    int _size; 
 
 public:
     LinkedList() : _head(nullptr), _tail(nullptr), _size(0) {}
@@ -34,12 +34,12 @@ public:
         }
     }
 
-    explicit LinkedList(size_t count, const T& value) : _head(nullptr), _tail(nullptr), _size(0) {
+    explicit LinkedList(int count, const T& value) : _head(nullptr), _tail(nullptr), _size(0) {
         std::random_device rd;
         std::mt19937 gen(rd());
         std::uniform_int_distribution<> dis(1, 100);
 
-        for (size_t i = 0; i < count; ++i) {
+        for (int i = 0; i < count; ++i) { 
             pushTail(static_cast<T>(dis(gen)));
         }
     }
@@ -158,7 +158,7 @@ public:
             throw std::out_of_range("Index out of range");
         }
         Node<T>* current = _head;
-        for (size_t i = 0; i < index; ++i) {
+        for (int i = 0; i < index; ++i) {
             current = current->next;
         }
         return current->data;
@@ -169,7 +169,7 @@ public:
             throw std::out_of_range("Index out of range");
         }
         Node<T>* current = _head;
-        for (size_t i = 0; i < index; ++i) {
+        for (int i = 0; i < index; ++i) {
             current = current->next;
         }
         return current->data;
@@ -201,7 +201,7 @@ public:
 
         Node<T>* current = _head;
         std::cout << "Elements in the list: ";
-        for (size_t i = 0; i < _size; ++i) {
+        for (int i = 0; i < _size; ++i) {
             std::cout << current->data << " ";
             current = current->next;
         }
