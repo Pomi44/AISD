@@ -17,7 +17,7 @@ void swap(int& a, int& b, stats& st) {
 
 stats bubbleSort(std::vector<int>& arr) {
     stats st;
-    int n = arr.size();
+    auto n = arr.size();
     bool swapped;
 
     for (int i = 0; i < n - 1; ++i) {
@@ -56,7 +56,7 @@ stats shakerSort(std::vector<int>& arr) {
             }
         }
 
-        if (!swapped) 
+        if (!swapped)
             break;
 
         swapped = false;
@@ -102,22 +102,24 @@ void merge(std::vector<int>& arr, int left, int mid, int right, std::vector<int>
         ++st.copy_count;
     }
 
+
     for (i = left; i <= right; ++i) {
         arr[i] = tempArr[i];
         ++st.copy_count;
     }
 }
 
+
 stats naturalTwoWayMergeSort(std::vector<int>& arr) {
     stats st;
-    int n = arr.size();
+    auto n = arr.size();
 
     std::vector<int> tempArr(n);
     bool sorted = false;
 
     while (!sorted) {
         sorted = true;
-        int left = 0;
+        auto left = 0;
 
         while (left < n) {
             int mid = left;
@@ -145,10 +147,6 @@ stats naturalTwoWayMergeSort(std::vector<int>& arr) {
 
     return st;
 }
-
-
-
-
 
 void printArray(const std::vector<int>& arr) {
     for (int num : arr) {

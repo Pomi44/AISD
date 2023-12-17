@@ -23,8 +23,13 @@ target_compile_features(sorting PUBLIC cxx_std_23)
 
 
 add_executable(sorting_test
-    "main_test.cc")
+    "sorting_test.cc")
 target_link_libraries(sorting_test gtest gtest_main sorting)
 target_include_directories(sorting_test PRIVATE "${CMAKE_SOURCE_DIR}")
+
+add_executable(task_test
+    "task_test.cc")
+target_link_libraries(task_test gtest gtest_main sorting)
+target_include_directories(task_test PRIVATE "${CMAKE_SOURCE_DIR}")
 
 
