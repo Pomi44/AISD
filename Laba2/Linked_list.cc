@@ -77,6 +77,14 @@ public:
         ++_size;
     }
 
+    void pushTail(const LinkedList& otherList) {
+        Node<T>* current = otherList.getHead();
+        while (current != nullptr) {
+            pushTail(current->data);
+            current = current->next;
+        }
+    }
+
     void pushHead(const T& value) {
         Node<T>* newNode = new Node<T>(value);
         if (_head == nullptr) {
@@ -93,6 +101,15 @@ public:
         }
         ++_size;
     }
+
+    void pushHead(const LinkedList& otherList) {
+        Node<T>* current = otherList.getTail();
+        while (current != nullptr) {
+            pushHead(current->data);
+            current = current->prev;
+        }
+    }
+
 
     void popHead() {
         if (_head == nullptr) {
@@ -170,14 +187,6 @@ public:
         return _tail;
     }
 
-    void setHead(Node<T>* newHead) {
-        _head = newHead;
-    }
-
-    void setTail(Node<T>* newTail) {
-        _tail = newTail;
-    }
-
     void clear() {
         while (_head != nullptr) {
             popHead();
@@ -236,11 +245,21 @@ public:
             foundNode = find(value);
         }
     }
+
+    void swapPointers() {
+        if (_size <= 1) {
+            return;
+        }
+
+        Node<T>* tempNode = _head;
+        _head = _tail;
+        _tail = tempNode;
+    }
 };
 
 template <typename T>
 void reverseLinkedList(LinkedList<T>& list) {
-    if (list.getSize() == 0 || list.getHead() == list.getTail()) {
+    if (list.getSize() <= 1) {
         return;
     }
 
@@ -255,9 +274,9 @@ void reverseLinkedList(LinkedList<T>& list) {
     }
 
     if (tempNode != nullptr) {
-        list.setHead(tempNode->prev);
-        list.setTail(tempNode);
+        list.swapPointers();
     }
 }
+
 
 #endif // LINKEDLIST_H
