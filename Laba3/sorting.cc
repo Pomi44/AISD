@@ -1,4 +1,5 @@
 #include <vector>
+#include <iostream>
 
 struct stats {
     size_t comparison_count = 0;
@@ -73,4 +74,85 @@ stats shakerSort(std::vector<int>& arr) {
     }
 
     return st;
+}
+
+void merge(std::vector<int>& arr, int left, int mid, int right, std::vector<int>& tempArr, stats& st) {
+    int i = left;
+    int j = mid + 1;
+    int k = left;
+
+    while (i <= mid && j <= right) {
+        ++st.comparison_count;
+        if (arr[i] <= arr[j]) {
+            tempArr[k++] = arr[i++];
+        }
+        else {
+            tempArr[k++] = arr[j++];
+        }
+        ++st.copy_count;
+    }
+
+    while (i <= mid) {
+        tempArr[k++] = arr[i++];
+        ++st.copy_count;
+    }
+
+    while (j <= right) {
+        tempArr[k++] = arr[j++];
+        ++st.copy_count;
+    }
+
+    for (i = left; i <= right; ++i) {
+        arr[i] = tempArr[i];
+        ++st.copy_count;
+    }
+}
+
+stats naturalTwoWayMergeSort(std::vector<int>& arr) {
+    stats st;
+    int n = arr.size();
+
+    std::vector<int> tempArr(n);
+    bool sorted = false;
+
+    while (!sorted) {
+        sorted = true;
+        int left = 0;
+
+        while (left < n) {
+            int mid = left;
+
+            while (mid + 1 < n && arr[mid] <= arr[mid + 1]) {
+                ++mid;
+            }
+
+            if (mid + 1 < n) {
+                int right = mid + 1;
+
+                while (right + 1 < n && arr[right] <= arr[right + 1]) {
+                    ++right;
+                }
+
+                merge(arr, left, mid, right, tempArr, st);
+                sorted = false;
+                left = right + 1;
+            }
+            else {
+                left = n;
+            }
+        }
+    }
+
+    return st;
+}
+
+
+
+
+
+void printArray(const std::vector<int>& arr) {
+    for (int num : arr) {
+        std::cout << num << " ";
+    }
+    std::cout << std::endl;
 }
